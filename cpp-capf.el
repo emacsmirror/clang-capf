@@ -1,13 +1,38 @@
-;;; -*- lexical-binding: t -*-
-;;; published under CC0 into the public domain
-;;; author: philip k. [https://zge.us.to], 2019
-;;;
-;;; based on:
-;;; - https://opensource.apple.com/source/lldb/lldb-167.2/llvm/tools/clang/utils/clang-completion-mode.el.auto.html
-;;; - https://github.com/company-mode/company-mode/blob/master/company-clang.el
-;;; - https://github.com/brianjcj/auto-complete-clang/blob/master/auto-complete-clang.el
-;;; - https://www.reddit.com/r/vim/comments/2wf3cn/basic_clang_autocompletion_query/
-;;; - https://foicica.com/wiki/cpp-clang-completion
+;;; cpp-capf.el --- completion-at-point backend for c/c++ using clang -*- lexical-binding: t -*-
+
+;; Author: Philip K. <philip@warpmail.net>
+;; Version: 0.1.0
+;; Keywords: c, abbrev, convenience
+;; Package-Requires: ((emacs "24.4"))
+;; URL: https://git.sr.ht/~zge/cpp-capf
+
+;; This file is NOT part of Emacs.
+;;
+;; This file is in the public domain, to the extent possible under law,
+;; published under the CC0 1.0 Universal license.
+;;
+;; For a full copy of the CC0 license see
+;; https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+;;; Commentary:
+;;
+;; Emacs built-in `completion-at-point' completion mechanism doesn't
+;; support C in any meaningful by default, which this package tries to
+;; remedy, by using clang's completion mechanism. Hence this package
+;; requires clang to be installed (as specified in `cpp-capf-clang'.
+;;
+;; If a header file is not automatically found or in the default path,
+;; extending `cpp-capf-include-paths' or `cpp-capf-extra-flags' might
+;; help.
+;;
+;; `cpp-capf' is based on/inspired by:
+;; - https://opensource.apple.com/source/lldb/lldb-167.2/llvm/tools/clang/utils/clang-completion-mode.el.auto.html
+;; - https://github.com/company-mode/company-mode/blob/master/company-clang.el
+;; - https://github.com/brianjcj/auto-complete-clang/blob/master/auto-complete-clang.el
+;; - https://www.reddit.com/r/vim/comments/2wf3cn/basic_clang_autocompletion_query/
+;; - https://foicica.com/wiki/cpp-clang-completion
+
+;;; Code:
 
 (defgroup cpp-capf nil
   "Completion back-end for C using clang."
@@ -34,8 +59,7 @@
   :group 'cpp-capf)
 
 (defun cpp-capf--completions (&rest _ignore)
-  "Function used for ‘completion-at-point-functions’ in by
-`cpp-completion-at-point-function'."
+  "Call clang to collect suggestions at point."
   (let* ((temp (generate-new-buffer " *clang*")))
     (prog2
         (apply
@@ -66,10 +90,9 @@
 
 ;;;###autoload
 (defun cpp-completion-at-point-function ()
-  "Return list of items for `completion-at-point' for completing
-C code."
+  "Function used for `completion-at-point-functions' using clang."
   (unless cpp-capf-clang
-    (error "company either not installed or not in path"))
+    (error "Company either not installed or not in path"))
   (list (save-excursion
           (unless (memq (char-before) '(?\. ?\t ?\n ?\ ?\; ?\)))
             (forward-word -1))
@@ -79,3 +102,5 @@ C code."
         :exclusive 'no))
 
 (provide 'cpp-capf)
+
+;;; cpp-capf.el ends here
