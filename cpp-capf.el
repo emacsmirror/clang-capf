@@ -45,18 +45,15 @@
     "/usr/include/x86_64-linux-gnu"
     "/usr/include" "." ".." "../..")
   "Paths to directories with header files."
-  :type 'list
-  :group 'cpp-capf)
+  :type 'list)
 
 (defcustom cpp-capf-extra-flags nil
   "Additional flags to call clang with."
-  :type 'list
-  :group 'cpp-capf)
+  :type 'list)
 
 (defcustom cpp-capf-clang (executable-find "clang++")
   "Path to clang binary."
-  :type 'file
-  :group 'cpp-capf)
+  :type 'file)
 
 (defun cpp-capf--completions (&rest _ignore)
   "Call clang to collect suggestions at point."
