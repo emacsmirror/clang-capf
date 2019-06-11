@@ -121,7 +121,10 @@
           (unless (memq (char-before) '(?\. ?\t ?\n ?\ ?\; ?\)))
             (forward-word -1))
           (point))
-        (point)
+        (save-excursion
+          (unless (memq (char-after) '(?\. ?\t ?\n ?\ ?\; ?\)))
+            (forward-word 1))
+          (point))
         (completion-table-with-cache #'cpp-capf--completions
                                      cpp-capf-ignore-case)
         :annotation-function (and cpp-capf-show-type
