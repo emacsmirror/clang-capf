@@ -49,7 +49,7 @@
 
 (defcustom cpp-capf-extra-flags nil
   "Additional flags to call clang with."
-  :type 'list)
+  :type '(list string))
 
 (defcustom cpp-capf-clang (executable-find "clang++")
   "Path to clang binary."
