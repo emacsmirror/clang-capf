@@ -59,6 +59,10 @@
   "Should completion ignore case."
   :type 'boolean)
 
+(defcustom cpp-capf-show-type t
+  "Should completion show types."
+  :type 'boolean)
+
 (defun cpp-capf--completions (&rest _ignore)
   "Call clang to collect suggestions at point."
   (let* ((temp (generate-new-buffer " *clang*")))
@@ -79,15 +83,34 @@
                                      (line-beginning-position)
                                      (point) 'utf-8 t))))
                        "-")))
-      (with-current-buffer temp
-        (goto-char (point-min))
-        (let (result)
-          (while (search-forward-regexp
-                  "^COMPLETION: \\(.+\\) : "
-                  nil t)
-            (push (match-string 1) result))
-          result))
+        (with-current-buffer temp
+          (goto-char (point-min))
+          (when cpp-capf-show-type
+            (save-excursion
+              (let ((re "<#\\|#>\\|\\[#\\|#]\\(?:[[:word:]]\\|_\\)+"))
+                (while (re-search-forward re nil t)
+                  (replace-match ""))))
+            (save-excursion
+              (save-match-data
+               (let ((re "[[:space:]]?\\(?:[[:word:]]\\|_\\)*\\([),]\\)"))
+                 (while (re-search-forward re nil t)
+                   (replace-match (match-string 1)))))))
+          (let (result)
+            (while (search-forward-regexp
+                    "^COMPLETION: \\(.+\\) : \\(.+\\)$"
+                    nil t)
+              (let ((symb (match-string 1)))
+                (put-text-property 0 (length symb)
+                                   'cpp-capf-sig (match-string 2)
+                                   symb)
+                (push symb result)))
+            result))
       (kill-buffer temp))))
+
+(defun cpp-capf--annotate (str)
+  "Extract type of completed symbol as annotation"
+  (let ((sig (get-text-property 0 'cpp-capf-sig str)))
+    (when sig (concat " : " sig))))
 
 ;;;###autoload
 (defun cpp-completion-at-point-function ()
@@ -101,6 +124,8 @@
         (point)
         (completion-table-with-cache #'cpp-capf--completions
                                      cpp-capf-ignore-case)
+        :annotation-function (and cpp-capf-show-type
+                                  #'cpp-capf--annotate)
         :exclusive 'no))
 
 (provide 'cpp-capf)
