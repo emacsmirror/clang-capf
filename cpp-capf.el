@@ -55,6 +55,10 @@
   "Path to clang binary."
   :type 'file)
 
+(defcustom cpp-capf-ignore-case nil
+  "Should completion ignore case."
+  :type 'boolean)
+
 (defun cpp-capf--completions (&rest _ignore)
   "Call clang to collect suggestions at point."
   (let* ((temp (generate-new-buffer " *clang*")))
@@ -95,7 +99,8 @@
             (forward-word -1))
           (point))
         (point)
-        (completion-table-with-cache #'cpp-capf--completions)
+        (completion-table-with-cache #'cpp-capf--completions
+                                     cpp-capf-ignore-case)
         :exclusive 'no))
 
 (provide 'cpp-capf)
