@@ -1,4 +1,4 @@
-;;; cpp-capf.el --- completion-at-point backend for c/c++ using clang -*- lexical-binding: t -*-
+;;; cpp-capf.el --- Completion-at-point backend for c/c++ using clang -*- lexical-binding: t -*-
 
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 0.1.0
