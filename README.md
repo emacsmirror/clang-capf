@@ -48,7 +48,7 @@ Bugs
 - After completing, no further text is added, although it might be
   useful to add `()` for functions or `{}` for structures.
 
-Any further bugs or questions can be submitted to the [mailing list]
+Any further bugs or questions can be submitted to the [mailing list][]
 (shared with other `*-capf` projects).
 
 Copying
