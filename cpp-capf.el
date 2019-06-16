@@ -108,7 +108,7 @@
       (kill-buffer temp))))
 
 (defun cpp-capf--annotate (str)
-  "Extract type of completed symbol as annotation"
+  "Extract type of completed symbol from STR as annotation."
   (let ((sig (get-text-property 0 'cpp-capf-sig str)))
     (when sig (concat " : " sig))))
 
