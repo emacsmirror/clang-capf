@@ -47,6 +47,11 @@
   "Paths to directories with header files."
   :type 'list)
 
+(defcustom cpp-capf-special-chars
+  '(?\. ?, ?\t ?\n ?\ ?\; ?\( ?\)  ?\n ?\t ? ?\" ?\')
+  "List of characters that wrap a symbol"
+  :type '(list character))
+
 (defcustom cpp-capf-extra-flags nil
   "Additional flags to call clang with."
   :type '(list string))
@@ -118,12 +123,12 @@
   (unless cpp-capf-clang
     (error "Company either not installed or not in path"))
   (list (save-excursion
-          (unless (memq (char-before) '(?\. ?\t ?\n ?\ ?\; ?\)))
-            (forward-word -1))
+          (unless (memq (char-before) cpp-capf-special-chars)
+            (backward-sexp))
           (point))
         (save-excursion
-          (unless (memq (char-after) '(?\. ?\t ?\n ?\ ?\; ?\)))
-            (forward-word 1))
+          (unless (memq (char-after) cpp-capf-special-chars)
+            (forward-sexp))
           (point))
         (completion-table-with-cache #'cpp-capf--completions
                                      cpp-capf-ignore-case)
