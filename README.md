@@ -20,13 +20,11 @@ something like this:
 	  :config
 	  (add-hook 'c-mode-hook
 				(lambda ()
-				  (add-hook 'completion-at-point-functions
-							#'cpp-completion-at-point-function
+				  (add-hook 'completion-at-point-functions #'cpp-capf
 							nil t))))
 
-This will let `completion-at-point` know that it should try
-`cpp-completion-at-point-function` _first_ when looking for completions,
-in `c-mode` buffers.
+This will let `completion-at-point` know that it should try `cpp-capf`
+_first_ when looking for completions, in `c-mode` buffers.
 
 Also make sure that `completion-at-point` or `complete-symbol` is
 actually bound.

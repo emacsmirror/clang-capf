@@ -118,7 +118,7 @@
     (when sig (concat " : " sig))))
 
 ;;;###autoload
-(defun cpp-completion-at-point-function ()
+(defun cpp-capf ()
   "Function used for `completion-at-point-functions' using clang."
   (unless cpp-capf-clang
     (error "Company either not installed or not in path"))
