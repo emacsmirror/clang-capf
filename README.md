@@ -58,6 +58,6 @@ Public Domain Dedication][cc0] license.
 [clang]: https://clang.llvm.org/
 [ivy]: https://github.com/abo-abo/swiper#ivy
 [screenshot1]: https://files.catbox.moe/z51xx7.png
-[screenshot1]: https://files.catbox.moe/nuunet.png
+[screenshot2]: https://files.catbox.moe/nuunet.png
 [mailing list]: https://lists.sr.ht/~zge/capf
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/deed
