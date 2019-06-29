@@ -56,7 +56,7 @@
   "Additional flags to call clang with."
   :type '(list string))
 
-(defcustom cpp-capf-clang (executable-find "clang++")
+(defcustom cpp-capf-clang "clang++"
   "Path to clang binary."
   :type 'file)
 
