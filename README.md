@@ -12,7 +12,7 @@ in Emacs, such as [ivy] might be worth recommending.
 How to use
 ----------
 
-Using MELPA and `use-package`, a minimal but sufficient setup might look
+Using [MELPA] and `use-package`, a minimal but sufficient setup might look
 something like this:
 
 	(use-package cpp-capf
@@ -57,6 +57,7 @@ Public Domain Dedication][cc0] license.
 
 [clang]: https://clang.llvm.org/
 [ivy]: https://github.com/abo-abo/swiper#ivy
+[MELPA]: https://melpa.org/#/cpp-capf
 [screenshot1]: https://files.catbox.moe/z51xx7.png
 [screenshot2]: https://files.catbox.moe/nuunet.png
 [mailing list]: https://lists.sr.ht/~zge/capf
