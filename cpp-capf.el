@@ -68,6 +68,30 @@
   "Should completion show types."
   :type 'boolean)
 
+
+(defun cpp-capf--parse-output ()
+  (when cpp-capf-show-type
+    (save-excursion
+      (let ((re "<#\\|#>\\|\\[#\\|#]\\(?:[[:word:]]\\|_\\)+"))
+        (while (re-search-forward re nil t)
+          (replace-match ""))))
+    (save-excursion
+      (save-match-data
+        (let ((re "[[:space:]]?\\(?:[[:word:]]\\|_\\)*\\([),]\\)"))
+          (while (re-search-forward re nil t)
+            (replace-match (match-string 1)))))))
+  (let (result)
+    (while (search-forward-regexp
+            "^COMPLETION: \\(.+\\) : \\(.+\\)$"
+            nil t)
+      (let ((symb (match-string 1)))
+        (put-text-property 0 1
+                           'sig
+                           (match-string 2)
+                           symb)
+        (push symb result)))
+    result))
+
 (defun cpp-capf--completions (&rest _ignore)
   "Call clang to collect suggestions at point."
   (let* ((temp (generate-new-buffer " *clang*")))
@@ -90,31 +114,12 @@
                        "-")))
         (with-current-buffer temp
           (goto-char (point-min))
-          (when cpp-capf-show-type
-            (save-excursion
-              (let ((re "<#\\|#>\\|\\[#\\|#]\\(?:[[:word:]]\\|_\\)+"))
-                (while (re-search-forward re nil t)
-                  (replace-match ""))))
-            (save-excursion
-              (save-match-data
-               (let ((re "[[:space:]]?\\(?:[[:word:]]\\|_\\)*\\([),]\\)"))
-                 (while (re-search-forward re nil t)
-                   (replace-match (match-string 1)))))))
-          (let (result)
-            (while (search-forward-regexp
-                    "^COMPLETION: \\(.+\\) : \\(.+\\)$"
-                    nil t)
-              (let ((symb (match-string 1)))
-                (put-text-property 0 (length symb)
-                                   'cpp-capf-sig (match-string 2)
-                                   symb)
-                (push symb result)))
-            result))
+          (cpp-capf--parse-output))
       (kill-buffer temp))))
 
 (defun cpp-capf--annotate (str)
   "Extract type of completed symbol from STR as annotation."
-  (let ((sig (get-text-property 0 'cpp-capf-sig str)))
+  (let ((sig (get-text-property 0 'sig str)))
     (when sig (concat " : " sig))))
 
 ;;;###autoload
