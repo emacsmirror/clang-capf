@@ -46,8 +46,8 @@ Bugs
 - After completing, no further text is added, although it might be
   useful to add `()` for functions or `{}` for structures.
 
-Any further bugs or questions can be submitted to the [mailing list][]
-(shared with other `*-capf` projects).
+Any further bugs or questions can be submitted to my [public
+inbox][mail].
 
 Copying
 -------
@@ -60,5 +60,5 @@ Public Domain Dedication][cc0] license.
 [MELPA]: https://melpa.org/#/cpp-capf
 [screenshot1]: https://files.catbox.moe/z51xx7.png
 [screenshot2]: https://files.catbox.moe/nuunet.png
-[mailing list]: https://lists.sr.ht/~zge/capf
+[mail]: https://lists.sr.ht/~zge/public-inbox
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/deed
