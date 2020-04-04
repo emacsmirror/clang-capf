@@ -45,16 +45,16 @@
     "/usr/include/x86_64-linux-gnu"
     "/usr/include" "." ".." "../..")
   "Paths to directories with header files."
-  :type 'list)
+  :type '(repeat string))
 
 (defcustom cpp-capf-special-chars
   '(?\. ?, ?\t ?\n ?\ ?\; ?\( ?\) ?\[ ?\] ?\{ ?\} ?\n ?\t ? ?\" ?\')
   "List of characters that wrap a symbol"
-  :type '(list character))
+  :type '(repeat character))
 
 (defcustom cpp-capf-extra-flags nil
   "Additional flags to call clang with."
-  :type '(list string))
+  :type '(repeat string))
 
 (defcustom cpp-capf-clang "clang++"
   "Path to clang binary."
