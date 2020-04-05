@@ -69,6 +69,10 @@
   :type 'boolean)
 
 
+(defcustom cpp-capf-add-parens t
+  "Should completions automatically add parentheses."
+  :type 'boolean)
+
 (defun cpp-capf--parse-output ()
   (when cpp-capf-show-type
     (save-excursion
@@ -122,6 +126,19 @@
   (let ((sig (get-text-property 0 'sig str)))
     (when sig (concat " : " sig))))
 
+(defun cpp-capf--exit (str finished)
+  "Add parentheses if applicable based on STR.
+FINISHED contains the final state of the completion."
+  (let ((sig (get-text-property 0 'sig str)))
+    (when (and (memq finished '(sole finished)) sig)
+      (cond ((string-match-p "\\`\\(?:[[:word:]]\\|_\\)*(" sig)
+             (insert "()"))
+            ((string-match-p "\\`\\(?:[[:word:]]\\|_\\)*\\[" sig)
+             (insert "[]"))
+            ((string-match-p "\\`\\(?:[[:word:]]\\|_\\)*{" sig)
+             (insert "{}")))
+      (forward-char -1))))
+
 ;;;###autoload
 (defun cpp-capf ()
   "Function used for `completion-at-point-functions' using clang."
@@ -139,6 +156,7 @@
                                      cpp-capf-ignore-case)
         :annotation-function (and cpp-capf-show-type
                                   #'cpp-capf--annotate)
+        :exit-function #'cpp-capf--exit
         :exclusive 'no))
 
 (provide 'cpp-capf)
