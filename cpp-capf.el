@@ -49,7 +49,7 @@
 
 (defcustom cpp-capf-special-chars
   '(?\. ?, ?\t ?\n ?\ ?\; ?\( ?\) ?\[ ?\] ?\{ ?\} ?\n ?\t ? ?\" ?\')
-  "List of characters that wrap a symbol"
+  "List of characters that wrap a symbol."
   :type '(repeat character))
 
 (defcustom cpp-capf-extra-flags nil
@@ -74,6 +74,7 @@
   :type 'boolean)
 
 (defun cpp-capf--parse-output ()
+  "Return list of completion options."
   (when cpp-capf-show-type
     (save-excursion
       (let ((re "<#\\|#>\\|\\[#\\|#]\\(?:[[:word:]]\\|_\\)+"))
