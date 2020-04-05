@@ -99,7 +99,7 @@
 
 (defun cpp-capf--completions (&rest _ignore)
   "Call clang to collect suggestions at point."
-  (let* ((temp (generate-new-buffer " *clang*")))
+  (let ((temp (generate-new-buffer " *clang*")))
     (prog2
         (apply
          #'call-process-region
