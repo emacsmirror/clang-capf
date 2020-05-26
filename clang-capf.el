@@ -1,10 +1,10 @@
-;;; cpp-capf.el --- Completion-at-point backend for c/c++ using clang -*- lexical-binding: t -*-
+;;; clang-capf.el --- Completion-at-point backend for c/c++ using clang -*- lexical-binding: t -*-
 
 ;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 1.0.0
 ;; Keywords: c, abbrev, convenience
 ;; Package-Requires: ((emacs "24.4"))
-;; URL: https://git.sr.ht/~zge/cpp-capf
+;; URL: https://git.sr.ht/~zge/clang-capf
 
 ;; This file is NOT part of Emacs.
 ;;
@@ -19,13 +19,13 @@
 ;; Emacs built-in `completion-at-point' completion mechanism doesn't
 ;; support C in any meaningful by default, which this package tries to
 ;; remedy, by using clang's completion mechanism. Hence this package
-;; requires clang to be installed (as specified in `cpp-capf-clang'.
+;; requires clang to be installed (as specified in `clang-capf-clang'.
 ;;
 ;; If a header file is not automatically found or in the default path,
-;; extending `cpp-capf-include-paths' or `cpp-capf-extra-flags' might
+;; extending `clang-capf-include-paths' or `clang-capf-extra-flags' might
 ;; help.
 ;;
-;; `cpp-capf' is based on/inspired by:
+;; `clang-capf' is based on/inspired by:
 ;; - https://opensource.apple.com/source/lldb/lldb-167.2/llvm/tools/clang/utils/clang-completion-mode.el.auto.html
 ;; - https://github.com/company-mode/company-mode/blob/master/company-clang.el
 ;; - https://github.com/brianjcj/auto-complete-clang/blob/master/auto-complete-clang.el
@@ -34,12 +34,12 @@
 
 ;;; Code:
 
-(defgroup cpp-capf nil
+(defgroup clang-capf nil
   "Completion back-end for C using clang."
   :group 'completion
-  :prefix "cpp-capf-")
+  :prefix "clang-capf-")
 
-(defcustom cpp-capf-include-paths
+(defcustom clang-capf-include-paths
   '("/usr/local/include"
     "/usr/lib/llvm-7/lib/clang/7.0.1/include"
     "/usr/include/x86_64-linux-gnu"
@@ -47,35 +47,35 @@
   "Paths to directories with header files."
   :type '(repeat string))
 
-(defcustom cpp-capf-special-chars
+(defcustom clang-capf-special-chars
   '(?\. ?, ?\t ?\n ?\ ?\; ?\( ?\) ?\[ ?\] ?\{ ?\} ?\n ?\t ? ?\" ?\')
   "List of characters that wrap a symbol."
   :type '(repeat character))
 
-(defcustom cpp-capf-extra-flags nil
+(defcustom clang-capf-extra-flags nil
   "Additional flags to call clang with."
   :type '(repeat string))
 
-(defcustom cpp-capf-clang "clang++"
+(defcustom clang-capf-clang "clang++"
   "Path to clang binary."
   :type 'file)
 
-(defcustom cpp-capf-ignore-case nil
+(defcustom clang-capf-ignore-case nil
   "Should completion ignore case."
   :type 'boolean)
 
-(defcustom cpp-capf-show-type t
+(defcustom clang-capf-show-type t
   "Should completion show types."
   :type 'boolean)
 
 
-(defcustom cpp-capf-add-parens t
+(defcustom clang-capf-add-parens t
   "Should completions automatically add parentheses."
   :type 'boolean)
 
-(defun cpp-capf--parse-output ()
+(defun clang-capf--parse-output ()
   "Return list of completion options."
-  (when cpp-capf-show-type
+  (when clang-capf-show-type
     (save-excursion
       (let ((re "<#\\|#>\\|\\[#\\|#]\\(?:[[:word:]]\\|_\\)+"))
         (while (re-search-forward re nil t)
@@ -97,19 +97,19 @@
         (push symb result)))
     result))
 
-(defun cpp-capf--completions (&rest _ignore)
+(defun clang-capf--completions (&rest _ignore)
   "Call clang to collect suggestions at point."
   (let ((temp (generate-new-buffer " *clang*")))
     (prog2
         (apply
          #'call-process-region
          (append (list (point-min) (point-max)
-                       cpp-capf-clang nil temp nil
+                       clang-capf-clang nil temp nil
                        "-cc1" "-fsyntax-only"
                        "-code-completion-macros")
                  (mapcar (apply-partially #'concat "-I")
-                         cpp-capf-include-paths)
-                 cpp-capf-extra-flags
+                         clang-capf-include-paths)
+                 clang-capf-extra-flags
                  (list (format
                         "-code-completion-at=-:%d:%d"
                         (line-number-at-pos)
@@ -119,15 +119,15 @@
                        "-")))
         (with-current-buffer temp
           (goto-char (point-min))
-          (cpp-capf--parse-output))
+          (clang-capf--parse-output))
       (kill-buffer temp))))
 
-(defun cpp-capf--annotate (str)
+(defun clang-capf--annotate (str)
   "Extract type of completed symbol from STR as annotation."
   (let ((sig (get-text-property 0 'sig str)))
     (when sig (concat " : " sig))))
 
-(defun cpp-capf--exit (str finished)
+(defun clang-capf--exit (str finished)
   "Add parentheses if applicable based on STR.
 FINISHED contains the final state of the completion."
   (let ((sig (get-text-property 0 'sig str)))
@@ -141,25 +141,25 @@ FINISHED contains the final state of the completion."
       (forward-char -1))))
 
 ;;;###autoload
-(defun cpp-capf ()
+(defun clang-capf ()
   "Function used for `completion-at-point-functions' using clang."
-  (unless cpp-capf-clang
+  (unless clang-capf-clang
     (error "Company either not installed or not in path"))
   (list (save-excursion
-          (unless (memq (char-before) cpp-capf-special-chars)
+          (unless (memq (char-before) clang-capf-special-chars)
             (backward-sexp))
           (point))
         (save-excursion
-          (unless (memq (char-after) cpp-capf-special-chars)
+          (unless (memq (char-after) clang-capf-special-chars)
             (forward-sexp))
           (point))
-        (completion-table-with-cache #'cpp-capf--completions
-                                     cpp-capf-ignore-case)
-        :annotation-function (and cpp-capf-show-type
-                                  #'cpp-capf--annotate)
-        :exit-function #'cpp-capf--exit
+        (completion-table-with-cache #'clang-capf--completions
+                                     clang-capf-ignore-case)
+        :annotation-function (and clang-capf-show-type
+                                  #'clang-capf--annotate)
+        :exit-function #'clang-capf--exit
         :exclusive 'no))
 
-(provide 'cpp-capf)
+(provide 'clang-capf)
 
-;;; cpp-capf.el ends here
+;;; clang-capf.el ends here

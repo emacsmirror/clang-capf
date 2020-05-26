@@ -1,30 +1,31 @@
-`cpp-capf.el`
-=============
+`clang-capf.el` (formerly `cpp-capf.el`)
+========================================
 
 This package provides a `completion-at-point` function to complete C/C++
 code using [clang], offering context-base suggestions for functions,
 variables and types without having to save the buffer.
 
-While `cpp-capf` doesn't require anything to be installed besides
-`clang` as an external component, a better looking completion front-end
-in Emacs, such as [ivy] might be worth recommending.
+While `clang-capf` doesn't require anything to be installed besides
+`clang` as an external component, a better looking completion
+front-end in Emacs, such as [ivy] might be worth recommending.
 
 How to use
 ----------
 
-Using [MELPA] and `use-package`, a minimal but sufficient setup might look
-something like this:
+Using [MELPA] and `use-package`, a minimal but sufficient setup might
+look something like this:
 
-	(use-package cpp-capf
+	(use-package clang-capf
 	  :after cc-mode
 	  :config
 	  (add-hook 'c-mode-hook
 				(lambda ()
-				  (add-hook 'completion-at-point-functions #'cpp-capf
+				  (add-hook 'completion-at-point-functions #'clang-capf
 							nil t))))
 
-This will let `completion-at-point` know that it should try `cpp-capf`
-_first_ when looking for completions, in `c-mode` buffers.
+This will let `completion-at-point` know that it should try
+`clang-capf` _first_ when looking for completions, in `c-mode`
+buffers.
 
 Also make sure that `completion-at-point` or `complete-symbol` is
 actually bound.
@@ -52,12 +53,12 @@ inbox][mail].
 Copying
 -------
 
-`cpp-capf.el` is distributed under the [CC0 1.0 Universal (CC0 1.0)
+`clang-capf.el` is distributed under the [CC0 1.0 Universal (CC0 1.0)
 Public Domain Dedication][cc0] license.
 
 [clang]: https://clang.llvm.org/
 [ivy]: https://github.com/abo-abo/swiper#ivy
-[MELPA]: https://melpa.org/#/cpp-capf
+[MELPA]: https://melpa.org/#/clang-capf
 [screenshot1]: https://files.catbox.moe/z51xx7.png
 [screenshot2]: https://files.catbox.moe/nuunet.png
 [mail]: https://lists.sr.ht/~zge/public-inbox
