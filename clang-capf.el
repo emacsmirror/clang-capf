@@ -160,6 +160,9 @@ FINISHED contains the final state of the completion."
         :exit-function #'clang-capf--exit
         :exclusive 'no))
 
+;;;###autoload
+(define-obsolete-function-alias 'cpp-capf #'clang-capf "2020-05-26")
+
 (provide 'clang-capf)
 
 ;;; clang-capf.el ends here
