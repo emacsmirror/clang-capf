@@ -94,24 +94,24 @@
 
 (defun clang-capf--completions (&rest _ignore)
   "Call clang to collect suggestions at point."
-  (let ((temp (generate-new-buffer " *clang*")))
-    (prog2
-        (apply
-         #'call-process-region
-         (append (list (point-min) (point-max)
-                       clang-capf-clang nil temp nil
-                       "-cc1" "-fsyntax-only"
-                       "-code-completion-macros")
-                 (mapcar (apply-partially #'concat "-I")
-                         clang-capf-include-paths)
-                 clang-capf-extra-flags
-                 (list (format
-                        "-code-completion-at=-:%d:%d"
-                        (line-number-at-pos)
-                        (1+ (length (encode-coding-region
-                                     (line-beginning-position)
-                                     (point) 'utf-8 t))))
-                       "-")))
+  ;; NOTE: with-temp-buffer cannot be used, because the process must
+  ;; be called in the actual code buffer, and `call-process-region'
+  ;; interprets START and END relativly to the current buffer.
+  (let* ((temp (generate-new-buffer " *clang*"))
+         (args `(,(point-min) ,(point-max)
+                 ,clang-capf-clang nil ,temp nil
+                 "-cc1" "-fsyntax-only"
+                 "-code-completion-macros"
+                 ,@(mapcar (apply-partially #'concat "-I")
+                           clang-capf-include-paths)
+                 ,@clang-capf-extra-flags
+                 ,(format "-code-completion-at=-:%d:%d"
+                          (line-number-at-pos)
+                          (1+ (length (encode-coding-region
+                                       (line-beginning-position)
+                                       (point) 'utf-8 t))))
+                 "-")))
+    (prog2 (apply #'call-process-region args)
         (with-current-buffer temp
           (goto-char (point-min))
           (clang-capf--parse-output))
