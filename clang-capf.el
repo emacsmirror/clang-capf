@@ -47,11 +47,6 @@
   "Paths to directories with header files."
   :type '(repeat string))
 
-(defcustom clang-capf-special-chars
-  '(?\. ?, ?\t ?\n ?\ ?\; ?\( ?\) ?\[ ?\] ?\{ ?\} ?\n ?\t ? ?\" ?\' ?>)
-  "List of characters that wrap a symbol."
-  :type '(repeat character))
-
 (defcustom clang-capf-extra-flags nil
   "Additional flags to call clang with."
   :type '(repeat string))
@@ -146,12 +141,10 @@ FINISHED contains the final state of the completion."
   (unless clang-capf-clang
     (error "Company either not installed or not in path"))
   (list (save-excursion
-          (unless (memq (char-before) clang-capf-special-chars)
-            (backward-sexp))
+          (skip-syntax-backward "w_")
           (point))
         (save-excursion
-          (unless (memq (char-after) clang-capf-special-chars)
-            (forward-sexp))
+          (skip-syntax-forward "w_")
           (point))
         (completion-table-with-cache #'clang-capf--completions
                                      clang-capf-ignore-case)
