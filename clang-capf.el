@@ -1,7 +1,7 @@
 ;;; clang-capf.el --- Completion-at-point backend for c/c++ using clang -*- lexical-binding: t -*-
 
-;; Author: Philip K. <philip@warpmail.net>
 ;; Version: 1.0.0
+;; Author: Philip K. <philipk [at] posteo [dot] net>
 ;; Keywords: c, abbrev, convenience
 ;; Package-Requires: ((emacs "24.4"))
 ;; URL: https://git.sr.ht/~zge/clang-capf
