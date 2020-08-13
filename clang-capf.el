@@ -53,8 +53,9 @@
   "Additional flags to call clang with."
   :type '(repeat string))
 
-(defcustom clang-capf-clang "clang++"
+(defcustom clang-capf-clang "clang"
   "Path to clang binary."
+  :safe #'stringp
   :type 'file)
 
 (defcustom clang-capf-ignore-case nil
