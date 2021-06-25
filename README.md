@@ -12,16 +12,14 @@ front-end in Emacs, such as [ivy] might be worth recommending.
 How to use
 ----------
 
-Using [MELPA] and `use-package`, a minimal but sufficient setup might
+Using [MELPA] and [setup], a minimal but sufficient setup might
 look something like this:
 
-	(use-package clang-capf
-	  :after cc-mode
-	  :config
-	  (add-hook 'c-mode-hook
-				(lambda ()
-				  (add-hook 'completion-at-point-functions #'clang-capf
-							nil t))))
+~~~elisp
+(setup (:package clang-capf)
+  (:with-mode cc-mode
+    (:local-hook completion-at-point-functions #'clang-capf)))
+~~~
 
 This will let `completion-at-point` know that it should try
 `clang-capf` _first_ when looking for completions, in `c-mode`
@@ -59,6 +57,7 @@ Public Domain Dedication][cc0] license.
 [clang]: https://clang.llvm.org/
 [ivy]: https://github.com/abo-abo/swiper#ivy
 [MELPA]: https://melpa.org/#/clang-capf
+[setup]: http://elpa.gnu.org/packages/setup.html
 [screenshot1]: https://files.catbox.moe/z51xx7.png
 [screenshot2]: https://files.catbox.moe/nuunet.png
 [mail]: https://lists.sr.ht/~zge/public-inbox
