@@ -157,8 +157,9 @@ FINISHED contains the final state of the completion."
         (end (save-excursion
                (skip-syntax-forward "w_")
                (point))))
-    (and (or clang-capf-complete-empty
-             (/= beg end))
+    (and (or (not clang-capf-complete-empty)
+             (/= beg end)
+             (not (looking-back (rx (or bol (+ space))) (point-min))))
          (list beg end
                (completion-table-with-cache #'clang-capf--completions
                                             clang-capf-ignore-case)
