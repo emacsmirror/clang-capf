@@ -149,7 +149,7 @@ FINISHED contains the final state of the completion."
 ;;;###autoload
 (defun clang-capf ()
   "Function used for `completion-at-point-functions' using clang."
-  (unless clang-capf-clang
+  (unless (executable-find clang-capf-clang)
     (error "Company either not installed or not in path"))
   (let ((beg (save-excursion
                (skip-syntax-backward "w_")
