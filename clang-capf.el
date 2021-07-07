@@ -4,7 +4,7 @@
 ;; Version: 1.2.1
 ;; Keywords: c, abbrev, convenience
 ;; Package-Requires: ((emacs "24.4"))
-;; URL: https://git.sr.ht/~zge/clang-capf
+;; URL: https://git.sr.ht/~pkal/clang-capf
 
 ;; This file is NOT part of Emacs.
 ;;
