@@ -7,7 +7,7 @@ variables and types without having to save the buffer.
 
 While `clang-capf` doesn't require anything to be installed besides
 `clang` as an external component, a better looking completion
-front-end in Emacs, such as [ivy] might be worth recommending.
+front-end in Emacs, such as [Ivy] or [Corfu] might be worth recommending.
 
 How to use
 ----------
@@ -44,7 +44,8 @@ Copying
 Public Domain Dedication][cc0] license.
 
 [clang]: https://clang.llvm.org/
-[ivy]: https://github.com/abo-abo/swiper#ivy
+[Ivy]: https://github.com/abo-abo/swiper#ivy
+[Corfu]: https://github.com/minad/corfu
 [MELPA]: https://melpa.org/#/clang-capf
 [setup]: http://elpa.gnu.org/packages/setup.html
 [mail]: https://lists.sr.ht/~zge/public-inbox
