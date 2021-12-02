@@ -12,13 +12,13 @@ front-end in Emacs, such as [ivy] might be worth recommending.
 How to use
 ----------
 
-Using [MELPA] and [setup], a minimal but sufficient setup might
-look something like this:
+Using [MELPA] and [setup], a minimal but sufficient configuration for
+C might look something like this:
 
 ~~~elisp
-(setup (:package clang-capf)
-  (:with-mode cc-mode
-    (:local-hook completion-at-point-functions #'clang-capf)))
+(setup c-mode
+  (:package clang-capf)
+  (:local-hook completion-at-point-functions #'clang-capf))
 ~~~
 
 This will let `completion-at-point` know that it should try
