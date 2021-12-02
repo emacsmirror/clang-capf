@@ -28,17 +28,6 @@ buffers.
 Also make sure that `completion-at-point` or `complete-symbol` is
 actually bound.
 
-Example
--------
-
-In vanilla Emacs:
-
-![screenshot1]
-
-With [ivy]:
-
-![screenshot2]
-
 Bugs
 ----
 
@@ -58,7 +47,5 @@ Public Domain Dedication][cc0] license.
 [ivy]: https://github.com/abo-abo/swiper#ivy
 [MELPA]: https://melpa.org/#/clang-capf
 [setup]: http://elpa.gnu.org/packages/setup.html
-[screenshot1]: https://files.catbox.moe/z51xx7.png
-[screenshot2]: https://files.catbox.moe/nuunet.png
 [mail]: https://lists.sr.ht/~zge/public-inbox
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/deed
