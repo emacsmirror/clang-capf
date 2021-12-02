@@ -41,22 +41,34 @@
   :group 'completion
   :prefix "clang-capf-")
 
-(defcustom clang-capf-include-paths
-  '("/usr/local/include"
-    "/usr/lib/llvm-7/lib/clang/7.0.1/include"
-    "/usr/include/x86_64-linux-gnu"
-    "/usr/include" "." ".." "../..")
-  "Paths to directories with header files."
-  :type '(repeat string))
-
-(defcustom clang-capf-extra-flags nil
-  "Additional flags to call clang with."
-  :type '(repeat string))
-
 (defcustom clang-capf-clang "clang"
   "Path to clang binary."
   :safe #'stringp
   :type 'file)
+
+(defcustom clang-capf-include-paths
+  (with-temp-buffer
+    (call-process clang-capf-clang nil t nil "-E" "-x" "c++" "-" "-v")
+    (goto-char (point-min))
+    (search-forward-regexp
+     (rx bol "#include <...> search starts here:" eol))
+    (let ((start (point)) files)
+      (search-forward-regexp
+       (rx bol "End of search list." eol))
+      (while (progn
+               (forward-line -1)
+               (< start (point)))
+        (back-to-indentation)
+        (push (buffer-substring (point) (line-end-position))
+              files))
+      (append '("." ".." "../..") files)))
+  "Paths to directories with header files."
+  :type '(repeat string)
+  :set-after 'clang-capf-clang)
+
+(defcustom clang-capf-extra-flags nil
+  "Additional flags to call clang with."
+  :type '(repeat string))
 
 (defcustom clang-capf-ignore-case nil
   "Should completion ignore case."
