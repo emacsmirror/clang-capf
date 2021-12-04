@@ -64,7 +64,7 @@
       (append '("." ".." "../..") files)))
   "Paths to directories with header files."
   :type '(repeat string)
-  :set-after 'clang-capf-clang)
+  :set-after '(clang-capf-clang))
 
 (defcustom clang-capf-extra-flags nil
   "Additional flags to call clang with."
