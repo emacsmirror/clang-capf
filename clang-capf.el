@@ -163,6 +163,11 @@ FINISHED contains the final state of the completion."
   "Function used for `completion-at-point-functions' using clang."
   (unless (executable-find clang-capf-clang)
     (error "Company either not installed or not in path"))
+  (when clang-capf-extra-flags
+    (setq-local clang-capf-extra-flags
+                (with-temp-buffer
+                  (insert-file-contents "compile_flags.txt")
+                  (split-string (buffer-string) "[\n\r]" t))))
   (let ((beg (save-excursion
                (skip-syntax-backward "w_")
                (point)))
