@@ -48,5 +48,5 @@ Public Domain Dedication][cc0] license.
 [Corfu]: https://github.com/minad/corfu
 [MELPA]: https://melpa.org/#/clang-capf
 [setup]: http://elpa.gnu.org/packages/setup.html
-[mail]: https://lists.sr.ht/~zge/public-inbox
+[mail]: https://lists.sr.ht/~pkal/public-inbox
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/deed
