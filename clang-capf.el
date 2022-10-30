@@ -41,27 +41,33 @@
   :group 'completion
   :prefix "clang-capf-")
 
-(defcustom clang-capf-clang "clang"
+(defcustom clang-capf-clang "gcc"
   "Path to clang binary."
   :safe #'stringp
   :type 'file)
 
+(defun clang-capf--include-paths ()
+  "Return a list of directories with header files."
+  (condition-case nil
+      (with-temp-buffer
+        (call-process clang-capf-clang nil t nil "-E" "-x" "c++" "-" "-v")
+        (goto-char (point-min))
+        (search-forward-regexp
+         (rx bol "#include <...> search starts here:" eol))
+        (let ((start (point)) files)
+          (search-forward-regexp
+           (rx bol "End of search list." eol))
+          (while (progn
+                   (forward-line -1)
+                   (< start (point)))
+            (back-to-indentation)
+            (push (buffer-substring (point) (line-end-position))
+                  files))
+          (append '("." ".." "../..") files)))
+    (file-missing)))
+
 (defcustom clang-capf-include-paths
-  (with-temp-buffer
-    (call-process clang-capf-clang nil t nil "-E" "-x" "c++" "-" "-v")
-    (goto-char (point-min))
-    (search-forward-regexp
-     (rx bol "#include <...> search starts here:" eol))
-    (let ((start (point)) files)
-      (search-forward-regexp
-       (rx bol "End of search list." eol))
-      (while (progn
-               (forward-line -1)
-               (< start (point)))
-        (back-to-indentation)
-        (push (buffer-substring (point) (line-end-position))
-              files))
-      (append '("." ".." "../..") files)))
+  (clang-capf--include-paths)
   "Paths to directories with header files."
   :type '(repeat string)
   :set-after '(clang-capf-clang))
@@ -118,6 +124,8 @@
 
 (defun clang-capf--completions (&rest _ignore)
   "Call clang to collect suggestions at point."
+  (unless clang-capf-include-paths
+    (setq clang-capf-include-paths (clang-capf--include-paths)))
   ;; NOTE: with-temp-buffer cannot be used, because the process must
   ;; be called in the actual code buffer, and `call-process-region'
   ;; interprets START and END relativly to the current buffer.
