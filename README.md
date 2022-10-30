@@ -12,13 +12,15 @@ front-end in Emacs, such as [Ivy] or [Corfu] might be worth recommending.
 How to use
 ----------
 
-Using [MELPA] and [setup], a minimal but sufficient configuration for
-C might look something like this:
+The package is distributed via [MELPA].  A minimal but sufficient
+configuration for C might look something like this:
 
 ~~~elisp
-(setup c-mode
-  (:package clang-capf)
-  (:local-hook completion-at-point-functions #'clang-capf))
+(defun local/clang-capf-init ()
+  "Add `clang-capf' to `completion-at-point-functions'."
+  (add-hook 'completion-at-point-functions #'clang-capf nil t))
+
+(add-hook 'c-mode-hook #'local/clang-capf-init)
 ~~~
 
 This will let `completion-at-point` know that it should try
@@ -47,6 +49,5 @@ Public Domain Dedication][cc0] license.
 [Ivy]: https://github.com/abo-abo/swiper#ivy
 [Corfu]: https://github.com/minad/corfu
 [MELPA]: https://melpa.org/#/clang-capf
-[setup]: http://elpa.gnu.org/packages/setup.html
 [mail]: https://lists.sr.ht/~pkal/public-inbox
 [cc0]: https://creativecommons.org/publicdomain/zero/1.0/deed
